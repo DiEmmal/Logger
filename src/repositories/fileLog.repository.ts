@@ -1,0 +1,56 @@
+import fs from 'fs';
+import { LogEntity, LogSeverity, } from '../entities/log.entity.js';
+import type { LogRepository } from './log.repository.js';
+
+export class FileLogRepository implements LogRepository {
+    path: string;
+
+    private readonly logsFiles = {
+        "logs": 'allLogs.log',
+        "warns": 'warnLogs.log',
+        "errors": 'errorLogs.log'
+    };
+
+    constructor(path: string = 'logs') {
+        this.path = path;
+        this.directoryVerification(path);
+    };
+
+    async saveLog(log: LogEntity): Promise<void> {
+        const filePath = `${this.path}/${this.logsFiles[log.level]}`;
+        const logString = `${JSON.stringify(log)}\n`;
+
+        fs.appendFileSync(`${this.path}/${this.logsFiles.logs}`, logString);
+
+        if (log.level === LogSeverity.low) return;
+        if (log.level === LogSeverity.medium) fs.appendFileSync(filePath, logString);
+        if (log.level === LogSeverity.high) fs.appendFileSync(filePath, logString);
+    };
+
+    async getLogs(severityLevel: LogSeverity): Promise<LogEntity[]> {
+        const file = `${this.path}/${this.logsFiles[severityLevel]}`;
+
+        const content: LogEntity[] = fs.readFileSync(file, 'utf-8')
+            .trim()
+            .split('\n')
+            .map(log => LogEntity.fromJSON(log))
+            .filter(log => log !== undefined);
+
+
+        return content;
+    };
+
+    private directoryVerification(path: string): void {
+
+        const directoryExists = fs.existsSync(path);
+
+        if (!directoryExists) fs.mkdirSync(path);
+
+        for (let logFile of Object.values(this.logsFiles)) {
+
+            if (!fs.existsSync(`${path}/${logFile}`)) fs.writeFileSync(`${path}/${logFile}`, '');
+
+        };
+    };
+
+};
