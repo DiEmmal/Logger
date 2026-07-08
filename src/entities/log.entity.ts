@@ -7,19 +7,19 @@ export enum LogSeverity {
 export interface Log {
     message: string;
     level: LogSeverity;
-    timestamp: Date;
+    timestamp?: Date;
 }
 
 
 export class LogEntity implements Log {
     message: string;
     level: LogSeverity;
-    timestamp: Date;
+    timestamp?: Date;
 
-    constructor(message: string, level: LogSeverity) {
-        this.message = message;
-        this.level = level;
-        this.timestamp = new Date();
+    constructor(log: Log) {
+        this.message = log.message;
+        this.level = log.level;
+        this.timestamp = log.timestamp ?? new Date();
     }
 
     static fromJSON(content: string): LogEntity | void {
@@ -33,10 +33,7 @@ export class LogEntity implements Log {
             !log.timestamp
         ) return;
 
-        
-
-        const logEntity = new LogEntity(log.message, log.level);
-        logEntity.timestamp = new Date(log.timestamp);
+        const logEntity: LogEntity = new LogEntity(log);
 
 
         return logEntity;

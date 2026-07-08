@@ -60,7 +60,10 @@ import { FileLogRepository } from "./Logger/repository/fileLog.repository.js";
 
 const logger = new Logger(new FileLogRepository());
 
-const log = new LogEntity("Database connection failed", LogSeverity.high);
+const log = new LogEntity({
+  message: "Database connection failed",
+  level: LogSeverity.high,
+});
 
 await logger.saveLog(log);
 
@@ -86,7 +89,6 @@ This will:
 2. Save a few demo logs.
 3. Read stored error logs.
 4. Print all logs in allLogs.log.
-
 
 ## Notes
 
