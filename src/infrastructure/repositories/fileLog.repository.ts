@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { LogEntity, LogSeverity, } from '../entities/log.entity.js';
-import type { LogRepository } from './log.repository.js';
+import { LogEntity, LogSeverity, } from '../../domain/entities/log.entity.js';
+import type { LogRepository } from '../../domain/repositories/log.repository.js';
 
 export class FileLogRepository implements LogRepository {
     path: string;

@@ -1,7 +1,6 @@
-import type { LogEntity, LogSeverity } from "./entities/log.entity.js";
-import { FileLogRepository } from "./repositories/fileLog.repository.js";
-import type { LogRepository } from "./repositories/log.repository.js";
-
+import type { LogEntity, LogSeverity } from "./domain/entities/log.entity.js";
+import { FileLogRepository } from "./infrastructure/repositories/fileLog.repository.js";
+import type { LogRepository } from "./domain/repositories/log.repository.js";
 
 class Logger {
 
