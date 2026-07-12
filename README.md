@@ -16,24 +16,16 @@ The logger is organized as a small independent module:
 
 ```text
 src/
-  Logger/
+  domain/
     entities/
       log.entity.ts
-    repository/
+    repositories/
       log.repository.ts
+  infrastructure/
+    repositories/
       fileLog.repository.ts
-    logger.ts
-  logger.demo.ts
-  app.ts
+  logger.ts
 ```
-
-### Main parts
-
-- `LogEntity`: represents a log entry.
-- `LogRepository`: defines the persistence contract.
-- `FileLogRepository`: stores and retrieves logs from files.
-- `Logger`: coordinates access to the repository.
-- `logger.demo.ts`: shows a simple demo of how the module can be used.
 
 ## How It Works
 
@@ -54,11 +46,8 @@ The repository writes:
 ## Basic Usage
 
 ```ts
-import { LogEntity, LogSeverity } from "./Logger/entities/log.entity.js";
-import { Logger } from "./Logger/logger.js";
-import { FileLogRepository } from "./Logger/repository/fileLog.repository.js";
-
-const logger = new Logger(new FileLogRepository());
+import type { LogEntity, LogSeverity } from "./domain/entities/log.entity.js";
+import { logger } from "./logger.js";
 
 const log = new LogEntity({
   message: "Database connection failed",
@@ -70,25 +59,6 @@ await logger.saveLog(log);
 const errorLogs = await logger.getLogs(LogSeverity.high);
 console.log(errorLogs);
 ```
-
-## Demo
-
-The project includes a demo file at `src/logger.demo.ts`.
-
-To run the project:
-
-```bash
-npm install
-npm run build
-node dist/logger.demo.js
-```
-
-This will:
-
-1. Create the log storage directory if it does not exist.
-2. Save a few demo logs.
-3. Read stored error logs.
-4. Print all logs in allLogs.log.
 
 ## Notes
 
