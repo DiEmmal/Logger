@@ -1,0 +1,21 @@
+# Changelog
+
+## 1.0.0
+
+* Initial release of the project.
+* Added the first version of the file-based logger.
+
+## 1.0.1
+
+* Improved the `LogEntity` constructor.
+* Simplified entity creation and timestamp handling.
+
+## 1.0.2
+
+* Refactored the project structure following Clean Architecture principles.
+* Separated the project into `domain` and `infrastructure` layers.
+
+## 1.0.3
+
+* Improved the `Logger` API.
+* Replaced the generic `saveLog()` method with `info()`, `warn()`, and `error()` methods for a simpler and more intuitive developer experience.

@@ -6,9 +6,9 @@ export class FileLogRepository implements LogRepository {
     path: string;
 
     private readonly logsFiles = {
-        "logs": 'allLogs.log',
-        "warns": 'warnLogs.log',
-        "errors": 'errorLogs.log'
+        "info": 'AllLogs.log',
+        "warn": 'warnLogs.log',
+        "error": 'errorLogs.log'
     };
 
     constructor(path: string = 'logs') {
@@ -20,11 +20,9 @@ export class FileLogRepository implements LogRepository {
         const filePath = `${this.path}/${this.logsFiles[log.level]}`;
         const logString = `${JSON.stringify(log)}\n`;
 
-        fs.appendFileSync(`${this.path}/${this.logsFiles.logs}`, logString);
+        fs.appendFileSync(`${this.path}/${this.logsFiles.info}`, logString);
 
-        if (log.level === LogSeverity.low) return;
-        if (log.level === LogSeverity.medium) fs.appendFileSync(filePath, logString);
-        if (log.level === LogSeverity.high) fs.appendFileSync(filePath, logString);
+        if (log.level !== LogSeverity.info) fs.appendFileSync(filePath, logString);
     };
 
     async getLogs(severityLevel: LogSeverity): Promise<LogEntity[]> {

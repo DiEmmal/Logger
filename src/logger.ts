@@ -1,4 +1,4 @@
-import type { LogEntity, LogSeverity } from "./domain/entities/log.entity.js";
+import { LogEntity, LogSeverity } from "./domain/entities/log.entity.js";
 import { FileLogRepository } from "./infrastructure/repositories/fileLog.repository.js";
 import type { LogRepository } from "./domain/repositories/log.repository.js";
 
@@ -14,9 +14,19 @@ class Logger {
         return this.logRepository.getLogs(severityLevel);
     }
 
-    async saveLog(log: LogEntity): Promise<void> {
-        return this.logRepository.saveLog(log);
-    }
+    async info(message: string): Promise<void> {
+        const log = new LogEntity({ level: LogSeverity.info, message, })
+        await this.logRepository.saveLog(log)
+    };
+
+    async warn(message: string): Promise<void> {
+        const log = new LogEntity({ level: LogSeverity.warn, message, })
+        await this.logRepository.saveLog(log)
+    };
+    async error(message: string): Promise<void> {
+        const log = new LogEntity({ level: LogSeverity.error, message, })
+        await this.logRepository.saveLog(log)
+    };
 
 };
 

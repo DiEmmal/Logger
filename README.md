@@ -34,8 +34,8 @@ The logger stores log entries in different files depending on severity.
 Current severity levels:
 
 - `LogSeverity.low`
-- `LogSeverity.medium`
-- `LogSeverity.high`
+- `LogSeverity.warn`
+- `LogSeverity.error`
 
 The repository writes:
 
@@ -46,18 +46,17 @@ The repository writes:
 ## Basic Usage
 
 ```ts
-import type { LogEntity, LogSeverity } from "./domain/entities/log.entity.js";
+import { LogSeverity } from "./domain/entities/log.entity.js";
 import { logger } from "./logger.js";
 
-const log = new LogEntity({
-  message: "Database connection failed",
-  level: LogSeverity.high,
-});
+// Create some logs
+await logger.info("This is an info log");
+await logger.warn("This is a warn log");
+await logger.error("This is an error log");
 
-await logger.saveLog(log);
-
-const errorLogs = await logger.getLogs(LogSeverity.high);
-console.log(errorLogs);
+// Display all logs
+const logs = await logger.getLogs(LogSeverity.info);
+console.log(logs);
 ```
 
 ## Notes

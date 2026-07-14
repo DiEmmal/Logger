@@ -1,7 +1,7 @@
 export enum LogSeverity {
-    low = 'logs',
-    medium = 'warns',
-    high = 'errors'
+    info = 'info',
+    warn = 'warn',
+    error = 'error'
 };
 
 export class LogEntity {
