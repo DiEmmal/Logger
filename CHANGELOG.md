@@ -19,3 +19,10 @@
 
 * Improved the `Logger` API.
 * Replaced the generic `saveLog()` method with `info()`, `warn()`, and `error()` methods for a simpler and more intuitive developer experience.
+
+## 1.1.0 - 2026-07-15
+
+* Added `examples/` with basic usage examples.
+* Added new severity levels: `debug`, `fatal`.
+* Fixed validation in `LogEntity.fromJSON()` to handle invalid JSON.
+* Improved the public API.

@@ -1,16 +1,14 @@
 {
   "name": "loggerts",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Simple logger using TS",
   "license": "ISC",
   "author": "DiEmmal",
   "type": "module",
-  "main": "logger.js",
+  "main": "./dist/logger.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:build": "rimraf dist && tsc",
-    "start:demo": "node dist/logger.demo.js",
-    "dev:demo": "tsx src/logger.demo.ts"
+    "build": "rimraf dist && tsc"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

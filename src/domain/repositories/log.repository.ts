@@ -1,10 +1,10 @@
-import type { LogEntity, LogSeverity } from "../entities/log.entity.js";
+import type { LogEntity } from "../entities/log.entity.js";
+import type { LogSeverity } from "../enums/logSeverity.enum.js";
 
 export abstract class LogRepository {
-    abstract getLogs(severityLevel: LogSeverity): Promise<LogEntity[]>;
+    abstract readLogs(severity: LogSeverity): Promise<LogEntity[]>;
     abstract saveLog(log: LogEntity): Promise<void>;
 
     // TODO implementar los siguientes metodos
-    // abstract getLogsBySeverity(severity: LogSeverity): Promise<LogEntity[]>;
-    // abstract deleteOldLogs(): Promise<boolean>;
+    // abstract deleteLogs(): Promise<boolean>;
 };

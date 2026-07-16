@@ -1,64 +1,87 @@
 # LoggerTS
 
-A simple logger built with Node.js and TypeScript as a backend learning project.
+LoggerTS is a small TypeScript logger to write and read logs by severity. It is designed as an educational project for learning Node.js, TypeScript, and software architecture.
 
-This project was created for study purposes and is inspired in part by ideas explored while following Fernando Herrera's Node.js course. The goal is not only to make a logger work, but also to practice cleaner structure, stronger typing, and progressive architectural thinking.
+## Installation
 
-## Project Goal
+```bash
+npm install
+```
 
-This repository is part of my backend learning process.
+To run the examples use the next comments:
 
-The current focus is to understand and practice:
+```bash
+npx tsx examples/create-logs.ts
+npx tsx examples/read-logs.ts
+```
+
+
+## Features
+
+- Write logs with multiple severity levels.
+- Read logs by severity.
+- JSON-based log storage.
+- TypeScript support.
+- Simple and lightweight.
+
+## Quick start
+
+```ts
+import { LogSeverity } from "./domain/enums/logSeverity.enum.js";
+import { logger } from "./logger.js";
+
+await logger.info("Informational message");
+await logger.debug("Debug message");
+await logger.error("Error message");
+
+const infos = await logger.getLogsBySeverity(LogSeverity.info);
+console.log(infos);
+```
+
+## API
+
+### Writing logs
+
+```ts
+logger.debug(message);
+logger.info(message);
+logger.warn(message);
+logger.error(message);
+logger.fatal(message);
+```
+
+### Reading logs
+
+```ts
+logger.getLogsBySeverity(severity);
+```
+
+Returns an array of `LogEntity`.
+
+### LogEntity
+
+```ts
+interface LogEntity {
+    message: string;
+    level: LogSeverity;
+    timestamp: Date;
+}
+```
 
 ## Current Architecture
 
-The logger is organized as a small independent module:
-
-```text
+```
 src/
   domain/
     entities/
-      log.entity.ts
+    enums/
     repositories/
-      log.repository.ts
   infrastructure/
     repositories/
-      fileLog.repository.ts
   logger.ts
+examples/
+logs/
 ```
-
-## How It Works
-
-The logger stores log entries in different files depending on severity.
-
-Current severity levels:
-
-- `LogSeverity.low`
-- `LogSeverity.warn`
-- `LogSeverity.error`
-
-The repository writes:
-
-- every log to `allLogs.log`
-- medium logs to `warnLogs.log`
-- high logs to `errorLogs.log`
-
-## Basic Usage
-
-```ts
-import { LogSeverity } from "./domain/entities/log.entity.js";
-import { logger } from "./logger.js";
-
-// Create some logs
-await logger.info("This is an info log");
-await logger.warn("This is a warn log");
-await logger.error("This is an error log");
-
-// Display all logs
-const logs = await logger.getLogs(LogSeverity.info);
-console.log(logs);
-```
-
 ## Notes
 
 This repository is meant to show my learning process honestly.

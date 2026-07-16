@@ -1,14 +1,18 @@
 import fs from 'fs';
-import { LogEntity, LogSeverity, } from '../../domain/entities/log.entity.js';
+import { LogEntity, } from '../../domain/entities/log.entity.js';
 import type { LogRepository } from '../../domain/repositories/log.repository.js';
+import { LogSeverity } from '../../domain/enums/logSeverity.enum.js';
 
 export class FileLogRepository implements LogRepository {
     path: string;
 
     private readonly logsFiles = {
-        "info": 'AllLogs.log',
+        "all": "allLogs.log",
+        "debug": 'debugLogs.log',
+        "info": 'infoLogs.log',
         "warn": 'warnLogs.log',
-        "error": 'errorLogs.log'
+        "error": 'errorLogs.log',
+        "fatal": 'fatalLogs.log',
     };
 
     constructor(path: string = 'logs') {
@@ -16,26 +20,25 @@ export class FileLogRepository implements LogRepository {
         this.directoryVerification(path);
     };
 
+    async readLogs(severity: LogSeverity): Promise<LogEntity[]> {
+        const path = `${this.path}/${this.logsFiles[severity]}`;
+
+        const logs = fs.readFileSync(path, 'utf-8')
+        .trim()
+        .split("\n")
+        .map(log => LogEntity.fromJSON(log))
+        .filter(log => log instanceof LogEntity)
+
+        return logs;
+    };
+
     async saveLog(log: LogEntity): Promise<void> {
         const filePath = `${this.path}/${this.logsFiles[log.level]}`;
         const logString = `${JSON.stringify(log)}\n`;
 
-        fs.appendFileSync(`${this.path}/${this.logsFiles.info}`, logString);
+        fs.appendFileSync(`${this.path}/${this.logsFiles.all}`, logString);
 
-        if (log.level !== LogSeverity.info) fs.appendFileSync(filePath, logString);
-    };
-
-    async getLogs(severityLevel: LogSeverity): Promise<LogEntity[]> {
-        const file = `${this.path}/${this.logsFiles[severityLevel]}`;
-
-        const content: LogEntity[] = fs.readFileSync(file, 'utf-8')
-            .trim()
-            .split('\n')
-            .map(log => LogEntity.fromJSON(log))
-            .filter(log => log !== undefined);
-
-
-        return content;
+        fs.appendFileSync(filePath, logString);
     };
 
     private directoryVerification(path: string): void {
