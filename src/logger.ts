@@ -1,9 +1,8 @@
 import { LogEntity } from "./domain/entities/log.entity.js";
-import { FileLogRepository } from "./infrastructure/repositories/fileLog.repository.js";
 import type { LogRepository } from "./domain/repositories/log.repository.js";
 import { LogSeverity } from "./domain/enums/logSeverity.enum.js";
 
-class Logger {
+export class Logger {
 
     constructor(
         private readonly logRepository: LogRepository,
@@ -15,9 +14,9 @@ class Logger {
         return this.logRepository.readLogs(severityLevel);
     };
     
-    // async getAllLogs(): Promise<LogEntity[]> {
-    //     return this.getLogsBySeverity();
-    // };
+    async getAllLogs(): Promise<LogEntity[]> {
+        return this.logRepository.readLogs();
+    };
 
     private async saveLog(message: string, level: LogSeverity) {
         const log = new LogEntity({ level, message })
@@ -44,5 +43,3 @@ class Logger {
         return this.saveLog(message, LogSeverity.fatal,);
     };
 };
-
-export const logger = new Logger(new FileLogRepository());

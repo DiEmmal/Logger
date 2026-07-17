@@ -26,3 +26,8 @@
 * Added new severity levels: `debug`, `fatal`.
 * Fixed validation in `LogEntity.fromJSON()` to handle invalid JSON.
 * Improved the public API.
+
+## 1.1.1 - 2026-07-17
+
+* Added a `createLogger()` function for easier configuration.
+* Improved the `Logger` API adding the `.getAllLogs()` method.

@@ -20,16 +20,21 @@ export class FileLogRepository implements LogRepository {
         this.directoryVerification(path);
     };
 
-    async readLogs(severity: LogSeverity): Promise<LogEntity[]> {
-        const path = `${this.path}/${this.logsFiles[severity]}`;
+    async readLogs(severity?: LogSeverity): Promise<LogEntity[]> {
+        if (severity) return this.transformLogs(severity);
+        else return this.transformLogs();
+    };
 
-        const logs = fs.readFileSync(path, 'utf-8')
-        .trim()
-        .split("\n")
-        .map(log => LogEntity.fromJSON(log))
-        .filter(log => log instanceof LogEntity)
-
-        return logs;
+    private async transformLogs(severity?: LogSeverity): Promise<LogEntity[]>{
+        let path: string;
+        if(severity) path = `${this.path}/${this.logsFiles[severity]}`;
+        else path = `${this.path}/${this.logsFiles.all}`
+            const logs = fs.readFileSync(path, 'utf-8')
+                .trim()
+                .split("\n")
+                .map(log => LogEntity.fromJSON(log))
+                .filter(log => log instanceof LogEntity)
+            return logs;
     };
 
     async saveLog(log: LogEntity): Promise<void> {

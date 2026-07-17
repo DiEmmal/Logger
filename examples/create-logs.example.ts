@@ -1,4 +1,6 @@
-import { logger } from "../src/logger.js";
+import { createLogger } from "../src/index.js";
+
+const logger = createLogger();
 
 logger.debug('This is a debug log');
 logger.info('This is an info log');

@@ -11,8 +11,8 @@ npm install
 To run the examples use the next comments:
 
 ```bash
-npx tsx examples/create-logs.ts
-npx tsx examples/read-logs.ts
+npx tsx examples/create-logs.example.ts
+npx tsx examples/read-logs.example.ts
 ```
 
 
@@ -27,15 +27,21 @@ npx tsx examples/read-logs.ts
 ## Quick start
 
 ```ts
-import { LogSeverity } from "./domain/enums/logSeverity.enum.js";
-import { logger } from "./logger.js";
+import { LogSeverity } from "../src/domain/enums/logSeverity.enum.js";
 
-await logger.info("Informational message");
-await logger.debug("Debug message");
-await logger.error("Error message");
+import { createLogger } from "../src/index.js";
 
-const infos = await logger.getLogsBySeverity(LogSeverity.info);
-console.log(infos);
+const logger = createLogger();
+
+logger.debug('This is a debug log');
+logger.info('This is an info log');
+logger.warn('This is a warn log');
+logger.error('This is an error log');
+logger.fatal('This is a fatal log');
+
+const logs = await logger.getLogsBySeverity(LogSeverity.error);
+
+console.log(logs);
 ```
 
 ## API
