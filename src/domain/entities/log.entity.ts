@@ -11,22 +11,29 @@ export class LogEntity {
         this.timestamp = log.timestamp ?? new Date();
     };
 
-    static fromJSON(content: string): LogEntity | void{
-        const log = JSON.parse(content);
+    static fromJSON(content: string): LogEntity | null {
+        try {
+            const log = JSON.parse(content);
 
-        if (typeof log !== "object" || log === null) return;
+        if (typeof log !== "object" || log === null) return null;
 
-        if (typeof log.message !== 'string') return;
+        if (typeof log.message !== 'string') return null;
 
-        if (!Object.values(LogSeverity).includes(log.level)) return;
+        if (!Object.values(LogSeverity).includes(log.level)) return null;
 
         if (log.timestamp && typeof log.timestamp === 'string') {
             const date = new Date(log.timestamp);
-            if (isNaN(date.getTime())) return;
-        } else return;
+            if (isNaN(date.getTime())) return null;
+        } else return null;
 
         const logEntity: LogEntity = new LogEntity(log);
         return logEntity;
+
+        } catch (error) {
+            
+         return null;   
+
+        }
     };
 
 

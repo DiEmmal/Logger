@@ -1,8 +1,9 @@
 import { FileLogRepository } from "./infrastructure/repositories/fileLog.repository.js";
+import type { CreateLoggerOptions } from "./interfaces/createLoggerOptions.interface.js";
 import { Logger } from "./logger.js"
 
-export const createLogger = () => {
+export const createLogger = async (options: CreateLoggerOptions = {}) => {
+    const filesLogRepository = await FileLogRepository.create(options);
 
-    return new Logger(new FileLogRepository());
-
+    return new Logger(filesLogRepository);
 };

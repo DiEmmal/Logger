@@ -1,6 +1,6 @@
 # LoggerTS
 
-LoggerTS is a small TypeScript logger to write and read logs by severity. It is designed as an educational project for learning Node.js, TypeScript, and software architecture.
+Logger is a small TypeScript logger to write and read logs by severity. It is designed as an educational project for learning Node.js, TypeScript, and software architecture.
 
 ## Installation
 
@@ -8,7 +8,7 @@ LoggerTS is a small TypeScript logger to write and read logs by severity. It is 
 npm install
 ```
 
-To run the examples use the next comments:
+To run the examples use the next scripts:
 
 ```bash
 npx tsx examples/create-logs.example.ts
@@ -27,17 +27,17 @@ npx tsx examples/read-logs.example.ts
 ## Quick start
 
 ```ts
-import { LogSeverity } from "../src/domain/enums/logSeverity.enum.js";
+import { createLogger, LogSeverity } from "../src/index.js";
 
-import { createLogger } from "../src/index.js";
+const logger = await createLogger({
+  path: 'application-logs',
+});
 
-const logger = createLogger();
-
-logger.debug('This is a debug log');
-logger.info('This is an info log');
-logger.warn('This is a warn log');
-logger.error('This is an error log');
-logger.fatal('This is a fatal log');
+await logger.debug('This is a debug log');
+await logger.info('This is an info log');
+await logger.warn('This is a warn log');
+await logger.error('This is an error log');
+await logger.fatal('This is a fatal log');
 
 const logs = await logger.getLogsBySeverity(LogSeverity.error);
 
@@ -47,19 +47,18 @@ console.log(logs);
 ## API
 
 ### Writing logs
-
 ```ts
-logger.debug(message);
-logger.info(message);
-logger.warn(message);
-logger.error(message);
-logger.fatal(message);
+await logger.debug(message);
+await logger.info(message);
+await logger.warn(message);
+await logger.error(message);
+await logger.fatal(message);
 ```
 
 ### Reading logs
 
 ```ts
-logger.getLogsBySeverity(severity);
+await logger.getLogsBySeverity(severity);
 ```
 
 Returns an array of `LogEntity`.
@@ -84,6 +83,9 @@ src/
     repositories/
   infrastructure/
     repositories/
+  interfaces/
+  createLogger.ts
+  index.ts
   logger.ts
 examples/
 logs/

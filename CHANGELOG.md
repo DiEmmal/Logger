@@ -31,3 +31,9 @@
 
 * Added a `createLogger()` function for easier configuration.
 * Improved the `Logger` API adding the `.getAllLogs()` method.
+
+## 1.2.0 - 2026-07-21
+
+* Added `CreateLoggerOptions` to simplify logger configuration.
+* Refactored the file repository to use asynchronous file operations with `fs/promises`.
+* Changed `createLogger()` to an asynchronous factory to ensure proper repository initialization.

@@ -1,7 +1,8 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import { LogEntity, } from '../../domain/entities/log.entity.js';
 import type { LogRepository } from '../../domain/repositories/log.repository.js';
 import { LogSeverity } from '../../domain/enums/logSeverity.enum.js';
+import type { CreateLoggerOptions } from '../../interfaces/createLoggerOptions.interface.js';
 
 export class FileLogRepository implements LogRepository {
     path: string;
@@ -15,48 +16,49 @@ export class FileLogRepository implements LogRepository {
         "fatal": 'fatalLogs.log',
     };
 
-    constructor(path: string = 'logs') {
-        this.path = path;
-        this.directoryVerification(path);
+    private constructor(options: CreateLoggerOptions) {
+        this.path = options.path ?? 'logs';
     };
+
+    static async create(options: CreateLoggerOptions = {}) {
+        const repository = new FileLogRepository(options);
+        await repository.directoryVerification();
+        return repository;
+    }
 
     async readLogs(severity?: LogSeverity): Promise<LogEntity[]> {
         if (severity) return this.transformLogs(severity);
         else return this.transformLogs();
     };
 
-    private async transformLogs(severity?: LogSeverity): Promise<LogEntity[]>{
+    private async transformLogs(severity?: LogSeverity): Promise<LogEntity[]> {
         let path: string;
-        if(severity) path = `${this.path}/${this.logsFiles[severity]}`;
+        if (severity) path = `${this.path}/${this.logsFiles[severity]}`;
         else path = `${this.path}/${this.logsFiles.all}`
-            const logs = fs.readFileSync(path, 'utf-8')
-                .trim()
-                .split("\n")
-                .map(log => LogEntity.fromJSON(log))
-                .filter(log => log instanceof LogEntity)
-            return logs;
+        const fileContent = await fs.readFile(path, 'utf-8')
+
+        const logs = fileContent
+            .trim()
+            .split("\n")
+            .map(log => LogEntity.fromJSON(log))
+            .filter(log => log instanceof LogEntity)
+            
+        return logs;
     };
 
     async saveLog(log: LogEntity): Promise<void> {
         const filePath = `${this.path}/${this.logsFiles[log.level]}`;
         const logString = `${JSON.stringify(log)}\n`;
 
-        fs.appendFileSync(`${this.path}/${this.logsFiles.all}`, logString);
+        await Promise.all([
+            fs.appendFile(`${this.path}/${this.logsFiles.all}`, logString),
+            fs.appendFile(filePath, logString),
+        ]);
 
-        fs.appendFileSync(filePath, logString);
     };
 
-    private directoryVerification(path: string): void {
-
-        const directoryExists = fs.existsSync(path);
-
-        if (!directoryExists) fs.mkdirSync(path);
-
-        for (let logFile of Object.values(this.logsFiles)) {
-
-            if (!fs.existsSync(`${path}/${logFile}`)) fs.writeFileSync(`${path}/${logFile}`, '');
-
-        };
+    private async directoryVerification(): Promise<void> {
+        await fs.mkdir(this.path, { recursive: true });
     };
 
 };
