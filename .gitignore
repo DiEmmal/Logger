@@ -3,3 +3,9 @@ dist/
 logs/
 
 node_modules/
+
+application-logs/
+
+tests-logs/
+
+coverage/

@@ -26,7 +26,11 @@ export class LogEntity {
             if (isNaN(date.getTime())) return null;
         } else return null;
 
-        const logEntity: LogEntity = new LogEntity(log);
+        const logEntity: LogEntity = new LogEntity({
+            ...log,
+            timestamp: new Date(log.timestamp),
+        });
+        
         return logEntity;
 
         } catch (error) {

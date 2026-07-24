@@ -1,0 +1,16 @@
+import { createLogger } from "../src/index.js"
+import { Logger } from "../src/logger.js"
+import { describe, it, expect } from "vitest"
+
+const path = 'application-logs';
+const logger = await createLogger({ path });
+
+describe('createLogger', () => {
+
+    it('should create a "Logger" instance', () => {
+
+        expect(logger).toBeInstanceOf(Logger);
+
+    });
+
+});

@@ -1,5 +1,8 @@
 {
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+],
   "exclude": ["examples", "dist", "node_modules"],
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
